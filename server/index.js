@@ -2,7 +2,13 @@ var browserify = require('browserify-middleware')
 var express = require('express')
 var app = express()
 var Path = require('path')
+var pg = require('pg')
+var config = require('../knexfile.js')
+var env = process.env.NODE_ENV || 'development';
+var knex = require('knex')(config[env]);
 
+
+knex.migrate.latest([config]);
 // Provide a browserified file at a specified path
 app.get('/js/app-bundle.js',
   browserify('./client/app.js'))
