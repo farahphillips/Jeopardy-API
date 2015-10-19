@@ -6,9 +6,10 @@ var pg = require('pg')
 var config = require('../knexfile.js')
 var env = process.env.NODE_ENV || 'development';
 var knex = require('knex')(config[env]);
-
+var api = require('./api')
 
 knex.migrate.latest([config]);
+
 // Provide a browserified file at a specified path
 app.get('/js/app-bundle.js',
   browserify('./client/app.js'))
@@ -17,12 +18,8 @@ app.get('/js/app-bundle.js',
 var assetFolder = Path.resolve(__dirname, '../client/public')
 app.use(express.static(assetFolder))
 
+app.use('/', api)
 
-//
-// The Catch-all Route
-// This is for supporting browser history pushstate.
-// NOTE: Make sure this route is always LAST.
-//
 app.get('/*', function(req, res){
   res.sendFile( assetFolder + '/index.html' )
 })
