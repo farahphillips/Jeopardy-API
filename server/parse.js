@@ -8,6 +8,7 @@ fs.readFile( __dirname + "/data.json", "utf8", function(err, data) {
   if (err) {
     console.error(err)
   } else {
+    console.log("Loaded file data.json, going to start parsing")
     data = JSON.parse(data)
     insertDb(data)
 
