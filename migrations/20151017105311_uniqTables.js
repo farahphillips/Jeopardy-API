@@ -25,40 +25,61 @@ exports.up = function(knex, Promise) {
   })
 
   var episodeNumbers = knex.schema.table('episodeNumbers', function (table) {
-    table.string('episode_number').unique();
+    table.integer('episode_number').unique();
     table.date('air_date')
     table.index(['episode_number']);
   })
   
-  console.log("Finished setting up the database")
+  
   return Promise.all([questionColumnDrop, categoriesDrop, questionValueAdd, valuesDrop, airDatesDrop, episodeNumbersDrop,
-    categories, episodeNumbers]);
+    categories, episodeNumbers])
+  .then(function(){
+    console.log("Finished setting up uniqTables migration")
+  });
 
 };
 
 exports.down = function(knex, Promise) {
 
-  var categories = knex.schema.table('categories', function (table) {
-    table.dropColumn('category')
-    table.string('category');
-  })
+  var removeIndex = knex.raw('DROP INDEX episodenumbers_episode_number_index , "categories_category_index"');
 
-  var values = knex.schema.table('values', function (table) {
-    table.dropColumn('value')
+  var values = knex.schema.createTable('values', function (table) {
+    table.increments('value_id').primary();
     table.integer('value');
   })
 
-  var airDates = knex.schema.table('airDates', function (table) {
+  var airDates = knex.schema.createTable('airDates', function(table) {
+    table.increments('air_date_id').primary();
     table.string('air_date');
-    table.uniq.index.string('air_date')
   })
 
-  var episodeNumbers = knex.schema.table('episodeNumbers', function (table) {
-    table.dropColumn('episode_number')
-    table.integer('episode_number');
+  var questionsTable = knex.schema.table('questions' , function (table){
+    table.dropColumn('value')
+    table.integer('value_id').references('value_id').inTable('values');
+    table.integer('air_date_id').references('air_date_id').inTable('airDates');
   })
-  
-  console.log("Finished setting up the database")
-  return Promise.all([categories, values, airDates, episodeNumbers]);
+
+  var episodeNumbersChange = knex.schema.table('episodeNumbers', function (table){
+    table.dropColumn('episode_number');
+    table.dropColumn('air_date');
+  })
+  .then(function(){
+    return knex.schema.table('episodeNumbers', function (table) {
+    table.integer('episode_number');
+    })
+  })
+
+  var categoriesDrop = knex.schema.table('categories', function (table) {
+    table.dropColumn('category');
+  })
+
+  var categories = knex.schema.table('categories', function (table) {
+    table.string('category');
+  })
+
+  return Promise.all([removeIndex, values, airDates ,questionsTable,episodeNumbersChange,categoriesDrop,categories])
+  .then(function(){
+    console.log("Finished rolling back uniqTables migration.")
+  });
   
 };

@@ -4,28 +4,24 @@ exports.up = function(knex, Promise) {
   var categories = knex.schema.createTable('categories', function(table) {
     table.increments('category_id').primary();
     table.string('category');
-    console.log("Created Categories Table");
   })
 
   //Initialize Values Table
   var values = knex.schema.createTable('values', function(table) {
     table.increments('value_id').primary();
     table.integer('value');
-    console.log("Created Values Table");
   })
 
   //Initialize Air Dates Table
   var airDates = knex.schema.createTable('airDates', function(table) {
     table.increments('air_date_id').primary();
     table.string('air_date');
-    console.log("Created Air Dates Table");
   })
 
   //Initialize Show Numbers Table
   var episodeNumbers = knex.schema.createTable('episodeNumbers', function(table) {
     table.increments('episode_number_id').primary();
     table.integer('episode_number');
-    console.log("Created Episode Numbers Table");
   })
 
 	//Initialize Questions Table
@@ -38,13 +34,25 @@ exports.up = function(knex, Promise) {
     table.integer('value_id').references('value_id').inTable('values');
     table.integer('air_date_id').references('air_date_id').inTable('airDates');
     table.integer('episode_number_id').references('episode_number_id').inTable('episodeNumbers');
-    console.log('Created Questions Table');
   })
 
-  console.log("Finished setting up the database")
-  return Promise.all([categories, values, airDates, episodeNumbers, questions]);
+  return Promise.all([categories, values, airDates, episodeNumbers, questions])
+  .then(function(){
+    console.log("Finished setting up init migration")
+  });
 };
 
 exports.down = function(knex, Promise) {
-  knex.schema.dropTable('categories').dropTable('values').dropTable('airDates').dropTable('episodeNumbers').dropTable('questions')
+  return knex.schema.dropTable('questions').
+  then(function(){
+    return knex.schema.dropTable('values')})
+  .then(function(){
+    return knex.schema.dropTable('airDates')})
+  .then(function(){
+    return knex.schema.dropTable('episodeNumbers')})
+  .then(function(){
+    return knex.schema.dropTable('categories')})
+  .then(function(){
+    console.log("Finished rolling back init migration")
+  })
 };
