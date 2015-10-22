@@ -4,15 +4,17 @@ var config = require('../knexfile.js')
 var env = process.env.NODE_ENV || 'development';
 var knex = require('knex')(config[env]);
 
-fs.readFile("./data.json", "utf8", function(err,data){
-  if(err){
-    console.error(err)
-  }else{
-    data = JSON.parse(data)
-    insertDb(data)
+// fs.readFile("./data.json", "utf8", function(err,data){
+//   if(err){
+//     console.error(err)
+//   }else{
+//     data = JSON.parse(data)
+//     insertDb(data)
       
-  }
-})
+//   }
+// })
+
+
 
 var insertDb = function(data){
   if(data.length === 0){
