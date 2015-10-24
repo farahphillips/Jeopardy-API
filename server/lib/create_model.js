@@ -1,8 +1,6 @@
 var db = require('./db.js')
 var Promise = require('bluebird')
 var util = require('util');
-//Temp Fix
-var objectAssign = require('object-assign');
 
 
 
@@ -55,7 +53,5 @@ module.exports = function (modelName, tablename, extras) {
   util.inherits(Model.InvalidArgument, Error)
 
   // Finally, mix in any extra methods from caller (see next section for an example)
-  // return Object.assign(Model, extras)
-  //TEMP FIX
-  return objectAssign(Model,extras)
+  return Object.assign(Model, extras)
 }
