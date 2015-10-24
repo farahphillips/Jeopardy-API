@@ -2,7 +2,7 @@ var fs = require('fs');
 var pg = require('pg')
 var config = require('../knexfile.js')
 var env = process.env.NODE_ENV || 'development';
-var knex = require('knex')(config[env]);
+var knex = require('knex')(config["test"]);
 
 fs.readFile( __dirname + "/data.json", "utf8", function(err, data) {
   if (err) {
