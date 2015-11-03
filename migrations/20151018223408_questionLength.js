@@ -6,8 +6,11 @@ exports.up = function(knex, Promise) {
   var questionLengthUp = knex.schema.table('questions', function (table) {
     table.text('question');
   })
-  console.log("Finished setting up the database")
-  return Promise.all([questionLengthDropUp,questionLengthUp]);
+
+  return Promise.all([questionLengthDropUp,questionLengthUp])
+  .then(function(){
+    console.log("Finished setting up questionLength migration")
+  });
   
 };
 
@@ -18,6 +21,7 @@ exports.down = function(knex, Promise) {
   var questionLengthDown = knex.schema.table('questions', function (table) {
     table.string('question');
   })
-  console.log("Finished setting up the database")
-  return Promise.all([questionLengthDropDown,questionLengthDown]);
+  return Promise.all([questionLengthDropDown,questionLengthDown]).then(function(){
+    console.log("Finished rolling back questionLength migration")
+  });
 };
