@@ -34,13 +34,19 @@ routes.get('/finaljeopardy', function (req, res) {
 })
 
 //all questions of a certain category id (/questions/:id)
-routes.get('/questions/:id', function (req, res) {
+routes.get('/questions/category/:id', function (req, res) {
   Question.findAllBy('category_id', req.params.id).then(function(questions){
     res.send(questions)
   })
-}) 
+})
 
 //all questions from an episode (/questions/:episode)
+routes.get('/questions/episode/:id', function (req, res) {
+  Question.findAllBy('episode_number_id', req.params.id).then(function(questions){
+    res.send(questions)
+  })
+})
+
 //all questions with media (/questions/media)
 //all questions without media (/questions/nomedia)
 //all questions from a date range (/questions/date/[object])
