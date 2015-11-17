@@ -62,5 +62,20 @@ describe("The Server", function() {
         }
       })
       .end(done)
-  })  
+  })
+
+  it("GET /api/questions/:id responds with all questions of a specified category id", function(done) {
+    return request(app)
+      .get('/api/questions/1')
+      .set('Accept', 'application/json')
+      .expect(200)
+      .expect(function(response) {
+        var res = response.body
+        for (var i = 0; i < res.length; i++) {
+          assert.equal(res[i].category_id, 1, "Question's category_id value should be 1");
+          assert.equal(typeof res[i].category_id, "number", "Question category_id should be a number");
+        }
+      })
+      .end(done)
+  })
 })

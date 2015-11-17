@@ -49,7 +49,10 @@ if (process.env.NODE_ENV !== 'test') {
 
   // Mount our main router
   app.use('/', routes)
-
+  
+  // Make JSON more readable
+  app.set('json spaces', 4)
+  
   // Start the server!
   var port = process.env.PORT || 4000
   app.listen(port)
