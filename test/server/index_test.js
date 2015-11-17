@@ -49,4 +49,18 @@ describe("The Server", function() {
       })
       .end(done)
   })
+
+  it("GET /api/finaljeopardy responds with all Final Jeopardy questions", function(done) {
+    return request(app)
+      .get('/api/finaljeopardy')
+      .set('Accept', 'application/json')
+      .expect(200)
+      .expect(function(response) {
+        var res = response.body
+        for (var i = 0; i < res.length; i++) {
+          assert.equal(res[i].round, "Final Jeopardy!", "Question's round value should be Final Jeopardy");
+        }
+      })
+      .end(done)
+  })  
 })

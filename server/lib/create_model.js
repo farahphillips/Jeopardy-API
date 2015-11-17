@@ -25,11 +25,19 @@ module.exports = function (modelName, tablename, extras) {
           return (rows.length === 0) ? Promise.reject(new Model.NotFound) : rows[0]
         })
     },
+
+    // Finds all by id
+    findAllBy: function (attrs, target) {
+      return db(tablename).select('*').where(attrs, target)
+        .then(function(rows) {
+          return (rows.length === 0) ? Promise.reject(new Model.NotFound) : rows
+        })
+    },
+
     // Returns a random single item
     random: function(){
       return db(tablename).select('*').offset(db.raw('random() * (select count(*) from "'+ tablename+'")')).limit(1)
       .then(function(res){
-        // console.log(res)
         return res[0]
       })
     }
