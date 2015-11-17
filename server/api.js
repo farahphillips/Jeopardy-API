@@ -27,6 +27,12 @@ routes.get('/categories', function (req, res) {
 })
 
 //all finalJeopardy
+routes.get('/finaljeopardy', function (req, res) {
+  Question.findAllBy('round', 'Final Jeopardy!').then(function(final){
+    res.send(final)
+  })
+})
+
 //all questions of a certain category (/questions/:category)
 //all questions from an episode (/questions/:episode)
 //all questions with media (/questions/media)
