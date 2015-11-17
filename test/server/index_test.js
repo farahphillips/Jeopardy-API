@@ -22,15 +22,29 @@ describe("The Server", function() {
       .end(done)
   })
 
-  it("GET /api/episodes responds with all episode numbers", function(done) {
+  it("GET /api/episodes responds with all episodes", function(done) {
     return request(app)
       .get('/api/episodes')
       .set('Accept', 'application/json')
       .expect(200)
       .expect(function(response) {
         var res = response.body
-        for (var i=0; i < res.length; i++) {
+        for (var i = 0; i < res.length; i++) {
           assert.equal(typeof res[i].episode_number, "string", "episode_number should be defined");
+        }
+      })
+      .end(done)
+  })
+
+  it("GET /api/categories responds with all categories", function(done) {
+    return request(app)
+      .get('/api/categories')
+      .set('Accept', 'application/json')
+      .expect(200)
+      .expect(function(response) {
+        var res = response.body
+        for (var i = 0; i < res.length; i++) {
+          assert.equal(typeof res[i].category, "string", "category should be defined");
         }
       })
       .end(done)

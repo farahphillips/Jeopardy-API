@@ -10,7 +10,6 @@ module.exports = function (modelName, tablename, extras) {
    var Model = {
 
     all: function () {
-      console.log(tablename)
       return db(tablename).select('*')
     },
 
