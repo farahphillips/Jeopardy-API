@@ -1,13 +1,14 @@
-var Question = require('./models/questions');
+var Questions = require('./models/questions');
 var Episodes = require('./models/episodes');
 var Categories = require('./models/categories');
+var Board = require('./models/board');
 var express = require('express');
 var routes = express.Router();
 
 
 // get a random single question
 routes.get('/questions/random', function (req, res) {
-  Question.random().then(function(randQ){
+  Questions.random().then(function(randQ){
     res.send(randQ)
   })
 })
@@ -26,28 +27,46 @@ routes.get('/categories', function (req, res) {
   })
 })
 
+//random category
+routes.get('/categories/random', function (req, res) {
+  Categories.random().then(function(randC){
+    res.send(randC)
+  })
+})
+
 //all finalJeopardy
 routes.get('/finaljeopardy', function (req, res) {
-  Question.findAllBy('round', 'Final Jeopardy!').then(function(final){
+  Questions.findAllBy('round', 'Final Jeopardy!').then(function(final){
     res.send(final)
   })
 })
 
 //all questions of a certain category id (/questions/:id)
 routes.get('/questions/category/:id', function (req, res) {
-  Question.findAllBy('category_id', req.params.id).then(function(questions){
+  Questions.findAllBy('category_id', req.params.id).then(function(questions){
     res.send(questions)
   })
 })
 
 //all questions from an episode (/questions/:episode)
 routes.get('/questions/episode/:id', function (req, res) {
-  Question.findAllBy('episode_number_id', req.params.id).then(function(questions){
+  Questions.findAllBy('episode_number_id', req.params.id).then(function(questions){
     res.send(questions)
   })
 })
 
+//generates a whole board of questions (/board)
+routes.get('/board', function (req, res) {
+  Board.generateBoard([1,2,3,4,5]).then(function(board){
+    res.send(board)
+  })
+})
+
+//generates a whole game (two rounds & final jeopardy) (/game)
+
+
 //all questions with media (/questions/media)
 //all questions without media (/questions/nomedia)
 //all questions from a date range (/questions/date/[object])
+
 module.exports = routes;
