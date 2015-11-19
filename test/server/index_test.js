@@ -50,6 +50,18 @@ describe("The Server", function() {
       .end(done)
   })
 
+  it("GET /api/categories/random responds with a random category", function(done) {
+    return request(app)
+      .get('/api/categories/random')
+      .set('Accept', 'application/json')
+      .expect(200)
+      .expect(function(response) {
+        var res = response.body
+        assert.equal(typeof res.category, "string", "question should defined");
+      })
+      .end(done)
+  })
+
   it("GET /api/finaljeopardy responds with all Final Jeopardy questions", function(done) {
     return request(app)
       .get('/api/finaljeopardy')

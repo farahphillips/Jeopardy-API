@@ -26,6 +26,13 @@ routes.get('/categories', function (req, res) {
   })
 })
 
+//random category
+routes.get('/categories/random', function (req, res) {
+  Categories.random().then(function(randC){
+    res.send(randC)
+  })
+})
+
 //all finalJeopardy
 routes.get('/finaljeopardy', function (req, res) {
   Question.findAllBy('round', 'Final Jeopardy!').then(function(final){
@@ -47,7 +54,19 @@ routes.get('/questions/episode/:id', function (req, res) {
   })
 })
 
+//generates a whole board of questions (/board)
+routes.get('/board', function (req, res) {
+  Categories.randomCategories(6).then(function(catIdArray){
+    return Question.questionsFromMultipleCategories(catIdArray)
+  })
+  .then(function(board){
+    res.send(board)
+  })
+})
+
 //all questions with media (/questions/media)
 //all questions without media (/questions/nomedia)
+
 //all questions from a date range (/questions/date/[object])
+
 module.exports = routes;
