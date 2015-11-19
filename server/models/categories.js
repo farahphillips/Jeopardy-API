@@ -2,6 +2,7 @@ var db = require('../lib/db');
 var Promise = require('bluebird');
 var createModel = require('../lib/create_model');
 var util = require('util');
+var Questions = require('./questions');
 
 
 var Categories = module.exports = createModel('Categories', 'categories', {
@@ -24,6 +25,30 @@ var Categories = module.exports = createModel('Categories', 'categories', {
     })
     .then(function(){
       return res
+    })
+  },
+
+  getCategoryName: function(catId){
+
+    return Categories.findBy({'category_id': catId})
+    .then(function(categoryName){
+      return categoryName.category
+    })
+  },
+
+  generateWholeCategory: function(catId){
+    var category = {}, res;
+
+    return Questions.uniqueQuestions(catId)
+    .then(function(questions){
+      res = questions
+      return Categories.getCategoryName(catId).then(function(categoryName){
+        return categoryName
+      })
+    })
+    .then(function(categoryName){
+      category[categoryName] = res
+      return category
     })
   }
 })
