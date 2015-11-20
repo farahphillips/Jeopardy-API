@@ -57,7 +57,7 @@ routes.get('/questions/episode/:id', function (req, res) {
 
 //generates a whole board of questions (/board)
 routes.get('/board', function (req, res) {
-  Board.generateBoard([1,2,3,4,5]).then(function(board){
+  Board.generateBoard().then(function(board){
     res.send(board)
   })
 })

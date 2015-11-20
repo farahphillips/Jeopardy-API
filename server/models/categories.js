@@ -14,7 +14,7 @@ var Categories = module.exports = createModel('Categories', 'categories', {
     })
   },
   
-  randomCategories: function(num){
+  getRandomCategories: function(num){
     var res = []
     num = num || 6
 

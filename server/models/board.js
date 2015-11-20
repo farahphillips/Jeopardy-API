@@ -7,10 +7,9 @@ var Categories = require('./categories');
 
 
 var Board = module.exports = createModel('Board', null, {
-  
-  generateBoard: function(catIdArray) {
+  generateBoardCategories: function(catIdArray) {
     var board = {}, promises = []
-    
+
     for (var i = 0; i < catIdArray.length; i++) {
       promises.push(Categories.generateWholeCategory(catIdArray[i])
         .then(function(category){
@@ -22,6 +21,17 @@ var Board = module.exports = createModel('Board', null, {
     return Promise.all(promises)
     .then(function(){
       return board
+    })
+  },
+
+  generateBoard: function() {
+    return Categories.getRandomCategories()
+    .then(function(categories) {
+      return Board.generateBoardCategories(categories)
+      .then(function(board) {
+        console.log(board, 'board')
+        return board
+      })
     })
   }
 
