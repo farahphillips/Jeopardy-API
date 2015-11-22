@@ -27,8 +27,8 @@ module.exports = function (modelName, tablename, extras) {
     },
 
     // Finds all by id
-    findAllBy: function (attrs, target) {
-      return db(tablename).select('*').where(attrs, target)
+    findAllBy: function (obj) {
+      return db(tablename).select('*').where(obj)
         .then(function(rows) {
           return (rows.length === 0) ? Promise.reject(new Model.NotFound) : rows
         })

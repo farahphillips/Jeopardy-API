@@ -7,27 +7,6 @@ var Questions = require('./questions');
 
 var Categories = module.exports = createModel('Categories', 'categories', {
 
-  length: function(){
-    return db('categories').count('category_id')
-    .then(function(num){
-      return num[0].count
-    })
-  },
-  
-  getRandomCategories: function(num){
-    var res = []
-    num = num || 6
-
-    return Categories.length().then(function(len){
-      for (var i = 0; i < num; i++) {
-        res.push(Math.ceil(Math.random() * len))
-      }
-    })
-    .then(function(){
-      return res
-    })
-  },
-
   getCategoryName: function(catId){
 
     return Categories.findBy({'category_id': catId})
@@ -36,10 +15,9 @@ var Categories = module.exports = createModel('Categories', 'categories', {
     })
   },
 
-  generateWholeCategory: function(catId){
+  generateWholeCategory: function(catId,round){
     var category = {}, res;
-
-    return Questions.uniqueQuestions(catId)
+    return Questions.uniqueQuestions(catId,round)
     .then(function(questions){
       res = questions
       return Categories.getCategoryName(catId).then(function(categoryName){
@@ -50,6 +28,23 @@ var Categories = module.exports = createModel('Categories', 'categories', {
       category[categoryName] = res
       return category
     })
+  },
+  
+  //This should take a string that defines what category we should pull questions from.
+  // Jeopardy!
+  // Double Jeopardy!
+  // Final Jeopardy!
+  //and return an array of id's that match that round.
+  getRandomCategory: function(str){
+    return db('questions')
+            .distinct('questions.category_id')
+            .innerJoin('categories','questions.category_id','categories.category_id')
+            .where({'round' : str})
+            .then(function(ids){
+              //This returns a random cateogry_id from the results of our database querry
+              return ids[Math.floor(Math.random() * ids.length)].category_id
+            })
+    
   }
 })
 

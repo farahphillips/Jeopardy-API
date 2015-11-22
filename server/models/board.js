@@ -7,9 +7,8 @@ var Categories = require('./categories');
 
 
 var Board = module.exports = createModel('Board', null, {
-  generateBoardCategories: function(catIdArray) {
+  generateBoardCategories: function() {
     var board = {}, promises = []
-
     for (var i = 0; i < catIdArray.length; i++) {
       promises.push(Categories.generateWholeCategory(catIdArray[i])
         .then(function(category){
@@ -22,6 +21,8 @@ var Board = module.exports = createModel('Board', null, {
     .then(function(){
       return board
     })
+    .catch(function(err){
+    })
   },
 
   generateBoard: function() {
@@ -29,7 +30,6 @@ var Board = module.exports = createModel('Board', null, {
     .then(function(categories) {
       return Board.generateBoardCategories(categories)
       .then(function(board) {
-        console.log(board, 'board')
         return board
       })
     })

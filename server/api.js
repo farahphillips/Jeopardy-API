@@ -36,21 +36,21 @@ routes.get('/categories/random', function (req, res) {
 
 //all finalJeopardy
 routes.get('/finaljeopardy', function (req, res) {
-  Questions.findAllBy('round', 'Final Jeopardy!').then(function(final){
+  Questions.findAllBy({ 'round' : 'Final Jeopardy!' }).then(function(final){
     res.send(final)
   })
 })
 
 //all questions of a certain category id (/questions/:id)
 routes.get('/questions/category/:id', function (req, res) {
-  Questions.findAllBy('category_id', req.params.id).then(function(questions){
+  Questions.findAllBy({'category_id': req.params.id}).then(function(questions){
     res.send(questions)
   })
 })
 
 //all questions from an episode (/questions/:episode)
 routes.get('/questions/episode/:id', function (req, res) {
-  Questions.findAllBy('episode_number_id', req.params.id).then(function(questions){
+  Questions.findAllBy({'episode_number_id' : req.params.id}).then(function(questions){
     res.send(questions)
   })
 })
