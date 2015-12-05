@@ -19,6 +19,7 @@ var Categories = module.exports = createModel('Categories', 'categories', {
     var category = {}, res;
     return Questions.uniqueQuestions(catId,round)
     .then(function(questions){
+      // console.log("QUESTIONS", questions)
       res = questions
       return Categories.getCategoryName(catId).then(function(categoryName){
         return categoryName

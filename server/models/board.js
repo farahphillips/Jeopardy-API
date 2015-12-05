@@ -25,19 +25,92 @@ var Board = module.exports = createModel('Board', null, {
     })
   },
 
-  generateBoard: function() {
-    return Categories.getRandomCategories()
-    .then(function(categories) {
-      return Board.generateBoardCategories(categories)
-      .then(function(board) {
-        return board
+  generateFirstRound: function() {
+    var round = {}, prom = [],catids = [];
+    for(var i = 0; i < 6; i++){
+      prom.push(Categories.getRandomCategory("Jeopardy!")
+        .then(function(cat){
+          catids.push(cat)
+      }))
+    }
+    
+    return Promise.all(prom)
+    .then(function(){
+      var promises = catids.map(function(id){
+                  return Categories.generateWholeCategory(id,"Jeopardy!")
+                         .then(function(cat){
+                            round[Object.keys(cat)[0]] = cat[Object.keys(cat)[0]];
+                            })
+                          })
+      return Promise.all(promises)
+      .then(function(){
+        return round
       })
-    })
+    }) 
+  },
+  
+   generateSecondRound: function() {
+    var round = {}, prom = [],catids = [];
+    for(var i = 0; i < 6; i++){
+      prom.push(Categories.getRandomCategory("Double Jeopardy!")
+        .then(function(cat){
+          catids.push(cat)
+      }))
+    }
+    
+    return Promise.all(prom)
+    .then(function(){
+      var promises = catids.map(function(id){
+                  return Categories.generateWholeCategory(id,"Double Jeopardy!")
+                         .then(function(cat){
+                            round[Object.keys(cat)[0]] = cat[Object.keys(cat)[0]];
+                            })
+                          })
+      return Promise.all(promises)
+      .then(function(){
+        return round
+      })
+    }) 
+  },
+  
+   generateFinalRound: function() {
+    var round = {}, prom = [],catids = [];
+      prom.push(Categories.getRandomCategory("Final Jeopardy!")
+        .then(function(cat){
+          catids.push(cat)
+      }))
+    
+    return Promise.all(prom)
+    .then(function(){
+      var promises = catids.map(function(id){
+                  return Categories.generateWholeCategory(id,"Final Jeopardy!")
+                         .then(function(cat){
+                            round[Object.keys(cat)[0]] = cat[Object.keys(cat)[0]];
+                            })
+                          })
+      return Promise.all(promises)
+      .then(function(){
+        return round
+      })
+    }) 
+  },
+  
+  generateBoard: function() {
+    var board = {}
+    return Board.generateFirstRound()
+           .then(function(firstRound){
+             board["Round One"] = firstRound
+           })
+           .then(Board.generateSecondRound)
+           .then(function(secondRound){
+             board["Round Two"] = secondRound
+           })
+           .then(Board.generateFinalRound)
+           .then(function(finalRound){
+             board["Final Round"] = finalRound
+             return board
+           })
   }
-
-  // generateGame: function() {
-
-  // }
 
 })
 

@@ -11,7 +11,6 @@ var Questions = module.exports = createModel('Questions', 'questions', {
     var result = {}
     return Questions.findAllBy({"category_id" : catId , "round":round})
     .then(function(res) {
-      
       //if round is "Final Jeopardy!" return a random one from the list
       if(round === "Final Jeopardy!"){
         result[1] = res[Math.floor(Math.random() *  res.length)]

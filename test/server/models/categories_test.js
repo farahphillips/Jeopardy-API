@@ -47,7 +47,7 @@ describe("Categories Model", function() {
         })
   })
   
-  it("getRandomCategoryId should return a category id of a round that is from 'Double Jeopardy!' round ", function(){
+  it("getRandomCategory should return a category id of a round that is from 'Double Jeopardy!' round ", function(){
     var question
     return Categories.getRandomCategory("Double Jeopardy!")
       .then(function(category){
@@ -59,6 +59,7 @@ describe("Categories Model", function() {
         assert.equal(typeof catName, "string", "should return a category")
         assert.equal(Object.keys(questions[catName]).length, 5, "should have 5 questions")
         for(var keys in questions[catName]){
+          // console.log(questions[catName][keys])
           assert.equal(questions[catName][keys].round, "Double Jeopardy!", "should be from Jeopardy! round.")
         } 
         })
