@@ -13,6 +13,7 @@ describe("Questions Model", function() {
           assert.equal(typeof questions[key].question, "string")
           assert.equal(typeof questions[key].answer, "string")
           assert.equal(typeof questions[key].question_id, "number")
+          assert.equal(typeof questions[key].round, "string")
           assert.equal(questions[key].category_id, catId)
         }
       })

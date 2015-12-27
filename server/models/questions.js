@@ -6,14 +6,19 @@ var util = require('util');
 
 var Questions = module.exports = createModel('Questions', 'questions', {
 
-  uniqueQuestions: function(catId){
+  uniqueQuestions: function(catId,round){
+    round = round || "Jeopardy!"
     var result = {}
-
-    return Questions.findAllBy('category_id', catId)
+    return Questions.findAllBy({"category_id" : catId , "round":round})
     .then(function(res) {
+      //if round is "Final Jeopardy!" return a random one from the list
+      if(round === "Final Jeopardy!"){
+        result[1] = res[Math.floor(Math.random() *  res.length)]
+        return result
+      }
       // if there are only 5 questions in the category,
       // they are unique & should be returned
-      if (res.length === 5) {
+      if (res.length < 5) {
         // for-loop parses the res array,
         // & inserts into an empty object
         for (var i = 0; i < 5; i++) {
