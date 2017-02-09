@@ -9,7 +9,7 @@ App.controller = function () {}
 App.view = function (ctrl) {
   return [
     m('h1', 'Node Catapult'),
-    m.component(MyComponent, { title: 'Welcome to my app!' })
+    m.component(MyComponent, { title: 'Welcome to Jeopardy!' })
   ]
 }
 
